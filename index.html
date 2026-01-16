@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DayFlow - Your Personal Day Planner</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='0.9em' font-size='90'%3E🗺️%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -846,8 +846,23 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                alert('Sorry, something went wrong. Please try again.');
-                resetPlanner();
+                
+                // Hide loading
+                document.getElementById('loadingSection').classList.remove('active');
+                document.getElementById('plannerSection').style.display = 'block';
+                
+                // Show specific error message
+                let errorMessage = 'Sorry, something went wrong. ';
+                
+                if (error.message.includes('API key')) {
+                    errorMessage += 'API key is not configured properly. Please check your Vercel environment variables.';
+                } else if (error.message.includes('fetch')) {
+                    errorMessage += 'Could not connect to the API. Please check your internet connection.';
+                } else {
+                    errorMessage += 'Please try again. If the problem persists, check the browser console for details.';
+                }
+                
+                alert(errorMessage + '\n\nError details: ' + error.message);
             }
         });
 
